@@ -17,3 +17,17 @@ RUN useradd -ms /bin/bash pdns
 RUN echo "pdns ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 USER pdns
 WORKDIR /home/pdns
+
+# Clone repo an execute basic configuration
+RUN git clone --recurse-submodules https://github.com/PowerDNS/pdns.git
+
+WORKDIR /home/pdns/pdns
+RUN build-scripts/gh-actions-setup-inv
+RUN inv apt-fresh
+RUN inv install-clang
+RUN inv install-auth-build-deps
+RUN inv install-rec-build-deps
+RUN inv install-dnsdist-build-deps
+
+# Cleanup directory
+RUN cd .. && rm -rf pdns
