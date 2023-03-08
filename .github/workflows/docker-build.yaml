@@ -10,7 +10,7 @@ env:
   IMAGE_TAG: "11"
 
 jobs:
-  login:
+  build-and-push-debian-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
