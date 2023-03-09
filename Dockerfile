@@ -13,15 +13,16 @@ RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.
 RUN apt-get update
 
 # Run as user "ubuntu". Make this user a passwordless sudoer
-RUN useradd -ms /bin/bash pdns
-RUN echo "pdns ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
-USER pdns
-WORKDIR /home/pdns
+RUN groupadd -g 122 runner
+RUN useradd -u 1001 -ms /bin/bash runner
+RUN echo "runner ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
+USER runner
+WORKDIR /home/runner
 
 # Clone repo an execute basic configuration
 RUN git clone https://github.com/PowerDNS/pdns.git
 
-WORKDIR /home/pdns/pdns
+WORKDIR /home/runner/pdns
 RUN build-scripts/gh-actions-setup-inv
 RUN inv apt-fresh
 RUN inv install-clang
@@ -30,4 +31,4 @@ RUN inv install-rec-build-deps
 RUN inv install-dnsdist-build-deps
 
 # Cleanup directory
-RUN cd .. && rm -rf pdns
+RUN cd .. && sudo rm -rf pdns
