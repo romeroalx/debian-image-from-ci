@@ -31,4 +31,5 @@ RUN inv install-rec-build-deps
 RUN inv install-dnsdist-build-deps
 
 # Cleanup directory
-RUN cd .. && sudo rm -rf pdns
+# Do not delete. used later.
+# RUN cd .. && sudo rm -rf pdns
