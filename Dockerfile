@@ -14,7 +14,7 @@ RUN apt-get update
 
 # Run as user "ubuntu". Make this user a passwordless sudoer
 RUN groupadd -g 122 runner
-RUN useradd -u 1001 -ms /bin/bash runner
+RUN useradd -u 1001 -ms /bin/bash -g runner runner
 RUN echo "runner ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 USER runner
 WORKDIR /home/runner
