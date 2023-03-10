@@ -24,7 +24,7 @@ USER runner
 
 # Copy permissions for /opt like Github runner VMs
 RUN sudo chmod 777 /opt
-RUN sudo setfacl -m default:user:runner:rwx /opt
+RUN sudo setfacl -m default:user::rwx /opt
 
 # Clone repo an execute basic configuration. Do not delete folder
 RUN mkdir -p ${GITHUB_DEFAULT_WS_FOLDER}
