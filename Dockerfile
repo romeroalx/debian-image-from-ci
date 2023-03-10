@@ -7,8 +7,9 @@ RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
 
 # Install basic SW and deugging tools
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
-    sudo git curl gnupg software-properties-common wget ca-certificates
-    apt-utils build-essential vim iproute2 net-tools iputils-* ifupdown cmake
+    sudo git curl gnupg software-properties-common wget \
+    ca-certificates apt-utils build-essential vim \
+    iproute2 net-tools iputils-* ifupdown cmake
 
 # Add LLVM repository
 RUN add-apt-repository 'deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-12 main'
