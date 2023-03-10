@@ -16,15 +16,15 @@ RUN add-apt-repository 'deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullsey
 RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
 RUN apt-get update
 
-# Copy permissions for /opt like Github runner VMs
-RUN chmod 777 /opt
-RUN setfacl -m default:user:runner:rwx /opt
-
 # Run as user "runner", uid 1001, gid 122. Make this user a passwordless sudoer
 RUN groupadd -g 122 runner
 RUN useradd -u 1001 -ms /bin/bash -g runner runner
 RUN echo "runner ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 USER runner
+
+# Copy permissions for /opt like Github runner VMs
+RUN sudo chmod 777 /opt
+RUN sudo setfacl -m default:user:runner:rwx /opt
 
 # Clone repo an execute basic configuration. Do not delete folder
 RUN mkdir -p ${GITHUB_DEFAULT_WS_FOLDER}
