@@ -17,7 +17,8 @@ RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.
 RUN apt-get update
 
 # Copy permissions for /opt like Github runner VMs
-RUN sudo chmod 777 /opt
+RUN chmod 777 /opt
+RUN setfacl -m default:user:runner:rwx /opt
 
 # Run as user "runner", uid 1001, gid 122. Make this user a passwordless sudoer
 RUN groupadd -g 122 runner
