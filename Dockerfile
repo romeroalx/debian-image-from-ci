@@ -17,18 +17,21 @@ RUN groupadd -g 122 runner
 RUN useradd -u 1001 -ms /bin/bash -g runner runner
 RUN echo "runner ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 USER runner
-WORKDIR /home/runner
+RUN mkdir -p /home/runner/work/pdns
+WORKDIR /home/runner/work/pdns
 
 # Clone repo an execute basic configuration
 RUN git clone https://github.com/PowerDNS/pdns.git
 
-WORKDIR /home/runner/pdns
+WORKDIR /home/runner/work/pdns/pdns
 RUN build-scripts/gh-actions-setup-inv
 RUN inv apt-fresh
 RUN inv install-clang
 RUN inv install-auth-build-deps
 RUN inv install-rec-build-deps
 RUN inv install-dnsdist-build-deps
+
+WORKDIR /home/runner
 
 # Cleanup directory
 # Do not delete. used later.
