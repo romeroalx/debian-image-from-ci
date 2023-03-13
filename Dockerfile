@@ -9,7 +9,7 @@ RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
     sudo git curl gnupg software-properties-common wget \
     ca-certificates apt-utils build-essential vim \
-    iproute2 net-tools iputils-* ifupdown cmake acl
+    iproute2 net-tools iputils-* ifupdown cmake acl npm
 
 # Add LLVM repository
 RUN add-apt-repository 'deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-12 main'
@@ -22,9 +22,8 @@ RUN useradd -u 1001 -ms /bin/bash -g runner runner
 RUN echo "runner ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 USER runner
 
-# Copy permissions for /opt like Github runner VMs
-RUN sudo chmod 777 /opt
-RUN sudo setfacl -m default:user::rwx /opt
+# Commented. not preserved on docker
+# RUN sudo setfacl -m default:user::rwx /opt
 
 # Clone repo an execute basic configuration. Do not delete folder
 RUN mkdir -p ${GITHUB_DEFAULT_WS_FOLDER}
@@ -39,5 +38,8 @@ RUN inv install-clang
 RUN inv install-auth-build-deps
 RUN inv install-rec-build-deps
 RUN inv install-dnsdist-build-deps
+
+# Copy permissions for /opt and node_modules like Github runner VMs
+RUN sudo chmod 777 /opt /opt/pdns-auth /usr/local/lib/node_modules
 
 WORKDIR /home/runner
